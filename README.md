@@ -14,5 +14,5 @@ Troisième séance:	+Le programme trouve les chemins
 Quatrième séance:	+Création de la documentation
 
 
-=============================================================================
+______________________________________________________________________________
 Created by Momo & Manu.
