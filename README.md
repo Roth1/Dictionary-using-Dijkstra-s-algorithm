@@ -1,3 +1,6 @@
 # Dictionary using Dijkstra's algorithm
-==========================================
+______________________________________________________________________________
 University Project: Implementing Dijkstra's algorithm in a dictionary (French)
+
+______________________________________________________________________________
+Created by Momo & Manu.
