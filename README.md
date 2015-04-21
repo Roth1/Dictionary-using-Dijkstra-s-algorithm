@@ -15,4 +15,4 @@ Quatrième séance:	+Création de la documentation
 
 
 ______________________________________________________________________________
-Created by Momo & Manu.
+Created by Mohamed & Roth1.
