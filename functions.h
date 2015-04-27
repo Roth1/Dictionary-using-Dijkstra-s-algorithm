@@ -3,9 +3,14 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <string.h>
+#include <ctype.h>
+#include "list.h"
 
-//creer_table_de_hachage();
-//Prototypes here
+//Hash-Function
+int hash(char[] str, int N);
+//Create a Hashtable
+Liste* creer_hashtable(char *f);
 
 
 #endif
