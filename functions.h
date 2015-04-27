@@ -8,7 +8,7 @@
 #include "list.h"
 
 //Hash-Function
-int hash(char[] str, int N);
+int hash(unsigned char *str, int N);
 //Create a Hashtable
 Liste* creer_hashtable(char *f);
 
