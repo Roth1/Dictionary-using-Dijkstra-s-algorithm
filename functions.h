@@ -13,11 +13,15 @@
 extern unsigned int taille_table;
 
 //Hash-Function
+<<<<<<< HEAD
 int hash(unsigned char* str, int N);
 
 //Add an element to the hashtable
 void ajout_mot(Liste* hashtable, unsigned char* mot);
 
+=======
+int hash(unsigned char *str, int N);
+>>>>>>> 48ecd2240429c8173cf6c0f470f2beea53bd158c
 //Create a Hashtable
 Liste* creer_hashtable(char *f);
 
