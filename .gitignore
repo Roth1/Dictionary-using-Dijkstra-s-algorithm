@@ -1,5 +1,6 @@
 #ignore anything except source-code and *.txt input
 *
 !*.c
+!*.h
 !*.txt
 !Makefile
