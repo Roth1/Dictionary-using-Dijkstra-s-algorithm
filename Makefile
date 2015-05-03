@@ -5,7 +5,7 @@ OBJS = $(SRCS: .c = .o)
 #Compiler & Flags
 CC = gcc
 CFLAGS = -Wall
-LFLAGS =
+LDFLAGS =
 
 #Executable
 EXEC = dict
@@ -14,7 +14,7 @@ EXEC = dict
 
 all : $(EXEC) move
 
-$(EXEC): $(OBJ)
+$(EXEC): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
