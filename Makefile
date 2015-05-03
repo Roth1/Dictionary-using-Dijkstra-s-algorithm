@@ -12,8 +12,6 @@ EXEC = dict
 
 ##########################################
 
-all : $(EXEC) move
-
 $(EXEC): $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 

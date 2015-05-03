@@ -13,7 +13,7 @@ typedef struct cellule* Liste;
 
 Liste creer_liste(void);
 int est_vide(Liste L);
-Liste ajout_tete(unsigend char *e, LISTE L);
+Liste ajout_tete(unsigned char *e, Liste L);
 Liste rech_chaine(char *chaine, Liste L);
 Liste rech(unsigned char *e, Liste L);
 int taille_liste(Liste L);

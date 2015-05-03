@@ -38,7 +38,7 @@ void ajout_mot( Liste *hashtable, unsigned char *mot) {
   int index = hash(mot);
   //Collision
   if(hashtable[index]) {
-    //Create or add to List
+    //Create or add to list
     hashtable[index]  = ajout_tete(mot, hashtable[index]);
   } else {
       hashtable[index]->val = mot;

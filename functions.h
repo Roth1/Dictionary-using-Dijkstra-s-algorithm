@@ -10,10 +10,10 @@
 #define tableSize 1000
 
 //Global variables (need to be redefined in *.c files)
-extern unsigned int taille_table;
+extern int taille_table;
 
 //Hash-Function
-int hash(unsigned char* str, int N);
+int hash(unsigned char* str);
 
 //Add an element to the hashtable
 void ajout_mot(Liste* hashtable, unsigned char* mot);
