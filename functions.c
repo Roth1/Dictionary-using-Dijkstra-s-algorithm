@@ -1,5 +1,8 @@
 #include "functions.h"
 
+int taille_table;
+
+/* OLD HASH-FCT
 int hash(unsigned char *str, int dimension_hashtable) {
   int k = strlen(str);
   int hash_value = 0;
@@ -10,36 +13,66 @@ int hash(unsigned char *str, int dimension_hashtable) {
   }
   return hash_value;
 }
+*/
 
-Liste* creer_hashtable(char *f) {
-  Liste* hashtable = NULL;
-  FILE* fichier = NULL;
+
+/*************************************************************************
+ * Hash-Function: Anagrams are guaranteed to create the same key.        *
+ *************************************************************************/
+int hash(unsigned char *str) {
+  int hash_value = 0;
+  int index = 0;
+  unsigned int i;
+  for(i = 0; i < strlen(str); i++) {
+    hash_value = hash_value + (int)str[i];
+  }
+  index = hash_value % tableSize;
+  return index;
+}
+
+
+/*************************************************************************
+ * Add-Function: Add a word to the Hashtable.                            *
+ *************************************************************************/
+void ajout_mot( Liste *hashtable, unsigned char *mot) {
+  int index = hash(mot);
+  //Collision
+  if(hashtable[index]) {
+    //Create or add to List
+    hashtable[index]  = ajout_tete(mot, hashtable[index]);
+  } else {
+      hashtable[index]->val = mot;
+      hashtable[index]->suiv = NULL;
+  }
+  //Count actual size of Hashtable
+  taille_table++;
+}
+
+
+/*************************************************************************
+ * Create-Hash-Table-Function: Read in words and create table of lists.  *
+ *************************************************************************/
+Liste *creer_hashtable(char *f) {
+  taille_table = 0;
+  Liste *hashtable = NULL;
+  FILE *fichier = NULL;
   //Open a text file
   fichier = fopen(f,"r+");
   //Error if file cannot be opened
   if(!fichier) {
-    puts("Unable to open/read text file!");
+    perror("Unable to open/read text file!");
     return NULL;
   }
   //Read text file
-  int c;
-  char custom_string[5];
-  char* word = custom_string;
-  int taille_table = 1;
-  while((c = fgetc(input_file)) != EOF) {
-    for(i = 0; i < 5 && c != '\n'; i++) {
-      //DO STUFF
+  char mot[4]; //Needs to be changed accordingly later on
+  int longueur_mot = strlen(mot) - 1;
+  while(fgets(mot, 5, fichier) != NULL) {
+    if(mot[longueur_mot] < 32) {
+      mot[longueur_mot] = '\0';
     }
-    //Collision
-    if(hashtable[hash(word)]) {
-      //Create List
-      hashtable + hash(word)  = ajout_tete(word, (hashtable + hash(word)));
-    }
-    //Set size of Hashtable
-    taille_table++;
+    ajout_mot(hashtable, mot);
   }
   fclose(fichier);
-  
   return hashtable;
 }
 

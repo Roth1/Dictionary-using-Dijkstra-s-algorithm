@@ -3,6 +3,6 @@
 
 int main() 
 {
-  // Enter code here
+  Liste* hashtable[tableSize] = creer_hashtable("a.txt");
   return 0;
 }
