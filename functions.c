@@ -39,10 +39,11 @@ void ajout_mot( Liste *hashtable, unsigned char *mot) {
   //Collision
   if(hashtable[index]) {
     //Create or add to list
-    hashtable[index]  = ajout_tete(mot, hashtable[index]);
+    hashtable[index]  = ajout_tete('\0', hashtable[index]);
   } else {
-      hashtable[index]->val = mot;
-      hashtable[index]->suiv = NULL;
+    hashtable[index] = (Liste) calloc(1, sizeof(*hashtable[index]));
+    hashtable[index]->val = '\0';
+    hashtable[index]->suiv = NULL;
   }
   //Count actual size of Hashtable
   taille_table++;
@@ -52,9 +53,9 @@ void ajout_mot( Liste *hashtable, unsigned char *mot) {
 /*************************************************************************
  * Create-Hash-Table-Function: Read in words and create table of lists.  *
  *************************************************************************/
-Liste *creer_hashtable(char *f) {
+Liste *creer_hashtable(char *f, int size) {
   taille_table = 0;
-  Liste *hashtable = NULL;
+  Liste hashtable[size];
   FILE *fichier = NULL;
   //Open a text file
   fichier = fopen(f,"r+");
@@ -66,7 +67,7 @@ Liste *creer_hashtable(char *f) {
   //Read text file
   char mot[4]; //Needs to be changed accordingly later on
   int longueur_mot = strlen(mot) - 1;
-  while(fgets(mot, 5, fichier) != NULL) {
+  while(fgets(mot, 4, fichier) != NULL) {
     if(mot[longueur_mot] < 32) {
       mot[longueur_mot] = '\0';
     }

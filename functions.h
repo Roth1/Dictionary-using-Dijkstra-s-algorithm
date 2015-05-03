@@ -19,7 +19,7 @@ int hash(unsigned char* str);
 void ajout_mot(Liste* hashtable, unsigned char* mot);
 
 //Create a Hashtable
-Liste* creer_hashtable(char *f);
+Liste* creer_hashtable(char *f, int size);
 
 
 #endif
