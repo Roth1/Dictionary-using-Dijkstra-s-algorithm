@@ -1,4 +1,4 @@
-#include "list.h"
+#include "liste.h"
 
 Liste creer_liste(void) { 
   return NULL;
@@ -32,6 +32,18 @@ Liste rech(unsigned char *e, Liste L) {
   return p;
 }
 */
+
+int recherche_liste(unsigned char *e, Liste L) {
+  Liste p = L;
+  while(p != NULL) {
+    printf("\n%s", p->val);
+    if(p->val == e) {
+      return 1;
+    }
+    p = p->suiv;
+  }
+  return 0;
+}
 
 int taille_liste(Liste L) {
   unsigned int i = 0;

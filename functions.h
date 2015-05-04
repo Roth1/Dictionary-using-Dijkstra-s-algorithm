@@ -5,14 +5,10 @@
 #include <limits.h>
 #include <string.h>
 #include <ctype.h>
-#include "list.h"
+#include "liste.h"
 
 #define TAILLE_HASHTABLE 1000
 #define MAX_TAILLE_MOT 25
-
-//Global variables (need to be redefined in *.c files)
-extern Liste hashtable[TAILLE_HASHTABLE];
-extern int taille_table;
 
 //Hash-Function
 int hash(unsigned char *str);
@@ -21,7 +17,9 @@ int hash(unsigned char *str);
 void ajout_mot(Liste *hashtable, unsigned char *mot);
 
 //Create a Hashtable
-void creer_hashtable(char *f);
+Liste *creer_hashtable(char *f);
 
+//Find close neighbors
+Liste get_proche_voisins(unsigned char *mot, Liste *hashtable);
 
 #endif

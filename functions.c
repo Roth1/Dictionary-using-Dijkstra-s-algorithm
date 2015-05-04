@@ -1,8 +1,5 @@
 #include "functions.h"
 
-//Global variables need to be redefined!
-Liste hashtable[TAILLE_HASHTABLE];
-int taille_table;
 
 /*************************************************************************
  * Hash-Function: Relatively good Hash-Function.                         *
@@ -37,24 +34,26 @@ void ajout_mot(Liste *hashtable, unsigned char *mot) {
     printf("\nAdded to list: %s", mot); 
   }
   //Count actual size of Hashtable
-  taille_table++;
+  //taille_table++;
 }
 
 
 /*************************************************************************
  * Create-Hash-Table-Function: Read in words and create table of lists.  *
  *************************************************************************/
-void creer_hashtable(char *f) {
+Liste *creer_hashtable(char *f) {
   FILE *fichier = NULL;
   //Open a text file with path+name f
   fichier = fopen(f,"r+");
   //Error if file cannot be opened
   if(!fichier) {
     perror("Unable to open/read text file!");
-    return;
+    return NULL;
   }
+  //Hashtable needs to have a static position in memory
+  static Liste hashtable[TAILLE_HASHTABLE];
   //Keep track of how many elements we add
-  taille_table = 0;
+  //static int taille_table = 0;
   //Read text file
   char mot[MAX_TAILLE_MOT];
   while(fgets(mot, MAX_TAILLE_MOT + 1, fichier) != NULL) {
@@ -72,4 +71,36 @@ void creer_hashtable(char *f) {
     }
   }
   fclose(fichier);
+  return hashtable;
+}
+
+
+/*************************************
+ *Construction du graphe:
+ *************************************/
+//void construire_graphe() {
+//}
+
+/*************************************************************************
+ * Find all neighbors with a distance of 1.                              *
+ *************************************************************************/
+Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
+  unsigned int i;
+  unsigned char c;
+  unsigned char voisin_mot[strlen(mot)];
+  static Liste liste_voisins = NULL;
+  for(i = 0; i < strlen(mot); i++) {
+    for(c = 'a'; c <= 'z'; c++) {
+      strcpy(voisin_mot, mot);
+      voisin_mot[i] = c;
+      Liste head_of_collision_list = hashtable[hash(voisin_mot)];
+      if(head_of_collision_list) {
+	if(recherche_liste(mot, head_of_collision_list)) {
+	  puts("WE HERE?");
+	  liste_voisins = ajout_tete(voisin_mot, liste_voisins);
+	}
+      }
+    }
+  }
+  return liste_voisins;
 }
