@@ -1,5 +1,5 @@
 #Source-Files & Object-Files
-SRCS = main.c functions.c list.c
+SRCS = main.c functions.c liste.c
 OBJS = $(SRCS: .c = .o)
 
 #Compiler & Flags

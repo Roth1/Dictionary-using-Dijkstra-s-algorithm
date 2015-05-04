@@ -26,12 +26,12 @@ void ajout_mot(Liste *hashtable, unsigned char *mot) {
     //Key unused: create new entry
     hashtable[index] = (Liste) calloc(1, sizeof(*hashtable[index]));
     hashtable[index]->val = mot;
-    printf("\nNew entry: %s",mot);
+    //printf("\nNew entry: %s", hashtable[index]->val);
     hashtable[index]->suiv = NULL;
   } else {
     //Collision: add to list
     hashtable[index]  = ajout_tete(mot, hashtable[index]);
-    printf("\nAdded to list: %s", mot); 
+    //printf("\nAdded to list: %s", mot); 
   }
   //Count actual size of Hashtable
   //taille_table++;
@@ -88,12 +88,14 @@ Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
   unsigned int i;
   unsigned char c;
   unsigned char voisin_mot[strlen(mot)];
+  Liste head_of_collision_list = NULL;
   static Liste liste_voisins = NULL;
   for(i = 0; i < strlen(mot); i++) {
     for(c = 'a'; c <= 'z'; c++) {
       strcpy(voisin_mot, mot);
       voisin_mot[i] = c;
-      Liste head_of_collision_list = hashtable[hash(voisin_mot)];
+      head_of_collision_list = hashtable[hash(voisin_mot)];
+      printf("\n%s", head_of_collision_list->val);
       if(head_of_collision_list) {
 	if(recherche_liste(mot, head_of_collision_list)) {
 	  puts("WE HERE?");
