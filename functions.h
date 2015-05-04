@@ -21,7 +21,7 @@ int hash(unsigned char *str);
 void ajout_mot(Liste *hashtable, unsigned char *mot);
 
 //Create a Hashtable
-void creer_hashtable(char *f, int size);
+void creer_hashtable(char *f);
 
 
 #endif

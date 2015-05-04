@@ -1,5 +1,6 @@
 #include "functions.h"
 
+//Global variables need to be redefined!
 Liste hashtable[TAILLE_HASHTABLE];
 int taille_table;
 
@@ -43,7 +44,7 @@ void ajout_mot(Liste *hashtable, unsigned char *mot) {
 /*************************************************************************
  * Create-Hash-Table-Function: Read in words and create table of lists.  *
  *************************************************************************/
-void creer_hashtable(char *f, int size) {
+void creer_hashtable(char *f) {
   FILE *fichier = NULL;
   //Open a text file with path+name f
   fichier = fopen(f,"r+");
