@@ -1,49 +1,39 @@
 #include "functions.h"
 
+Liste hashtable[TAILLE_HASHTABLE];
 int taille_table;
 
-/* OLD HASH-FCT
-int hash(unsigned char *str, int dimension_hashtable) {
-  int k = strlen(str);
-  int hash_value = 0;
-  int muliplier = 31;
-  int i;
-  for(i = 0; i < k; i++ ) {
-    hash_value = (hash_value * multiplier + tolower(str[i])) % dimension_hashtable;
-  }
-  return hash_value;
-}
-*/
-
-
 /*************************************************************************
- * Hash-Function: Anagrams are guaranteed to create the same key.        *
+ * Hash-Function: Relatively good Hash-Function.                         *
  *************************************************************************/
 int hash(unsigned char *str) {
   int hash_value = 0;
-  int index = 0;
-  unsigned int i;
-  for(i = 0; i < strlen(str); i++) {
-    hash_value = hash_value + (int)str[i];
+  int k = strlen(str);
+  int multiplier = 31;
+  int i;
+  for(i = 0; i < k; i++) {
+    hash_value = (hash_value * multiplier + str[i]) % TAILLE_HASHTABLE;
   }
-  index = hash_value % tableSize;
-  return index;
+  //printf( "\nhash_value: %d\n", hash_value);
+  return hash_value;
 }
 
 
 /*************************************************************************
  * Add-Function: Add a word to the Hashtable.                            *
  *************************************************************************/
-void ajout_mot( Liste *hashtable, unsigned char *mot) {
+void ajout_mot(Liste *hashtable, unsigned char *mot) {
   int index = hash(mot);
-  //Collision
-  if(hashtable[index]) {
-    //Create or add to list
-    hashtable[index]  = ajout_tete('\0', hashtable[index]);
-  } else {
+  if(hashtable[index] == NULL) {
+    //Key unused: create new entry
     hashtable[index] = (Liste) calloc(1, sizeof(*hashtable[index]));
-    hashtable[index]->val = '\0';
+    hashtable[index]->val = mot;
+    printf("\nNew entry: %s",mot);
     hashtable[index]->suiv = NULL;
+  } else {
+    //Collision: add to list
+    hashtable[index]  = ajout_tete(mot, hashtable[index]);
+    printf("\nAdded to list: %s", mot); 
   }
   //Count actual size of Hashtable
   taille_table++;
@@ -53,29 +43,32 @@ void ajout_mot( Liste *hashtable, unsigned char *mot) {
 /*************************************************************************
  * Create-Hash-Table-Function: Read in words and create table of lists.  *
  *************************************************************************/
-Liste *creer_hashtable(char *f, int size) {
-  taille_table = 0;
-  Liste hashtable[size];
+void creer_hashtable(char *f, int size) {
   FILE *fichier = NULL;
-  //Open a text file
+  //Open a text file with path+name f
   fichier = fopen(f,"r+");
   //Error if file cannot be opened
   if(!fichier) {
     perror("Unable to open/read text file!");
-    return NULL;
+    return;
   }
+  //Keep track of how many elements we add
+  taille_table = 0;
   //Read text file
-  char mot[4]; //Needs to be changed accordingly later on
-  int longueur_mot = strlen(mot) - 1;
-  while(fgets(mot, 4, fichier) != NULL) {
-    if(mot[longueur_mot] < 32) {
-      mot[longueur_mot] = '\0';
+  char mot[MAX_TAILLE_MOT];
+  while(fgets(mot, MAX_TAILLE_MOT + 1, fichier) != NULL) {
+    if(mot[0] != '\n') {
+      unsigned int vraie_longueur_mot = 0;
+      unsigned int i = 0;
+      while(mot[vraie_longueur_mot] != '\n') {
+	vraie_longueur_mot++;
+      }
+      char cpymot[vraie_longueur_mot];
+      for(i = 0; i < vraie_longueur_mot; i++) {
+	cpymot[i] = mot[i];
+      }
+      ajout_mot(hashtable, cpymot);
     }
-    ajout_mot(hashtable, mot);
   }
   fclose(fichier);
-  return hashtable;
 }
-
-
-

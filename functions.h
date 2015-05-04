@@ -7,19 +7,21 @@
 #include <ctype.h>
 #include "list.h"
 
-#define tableSize 1000
+#define TAILLE_HASHTABLE 1000
+#define MAX_TAILLE_MOT 25
 
 //Global variables (need to be redefined in *.c files)
+extern Liste hashtable[TAILLE_HASHTABLE];
 extern int taille_table;
 
 //Hash-Function
-int hash(unsigned char* str);
+int hash(unsigned char *str);
 
 //Add an element to the hashtable
-void ajout_mot(Liste* hashtable, unsigned char* mot);
+void ajout_mot(Liste *hashtable, unsigned char *mot);
 
 //Create a Hashtable
-Liste* creer_hashtable(char *f, int size);
+void creer_hashtable(char *f, int size);
 
 
 #endif
