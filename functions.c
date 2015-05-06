@@ -20,17 +20,14 @@ int hash(unsigned char *str) {
 /*************************************************************************
  * Add-Function: Add a word to the Hashtable.                            *
  *************************************************************************/
-void ajout_mot(Liste *hashtable, unsigned char *mot) {
+void ajout_mot(unsigned char *mot, unsigned int taille_mot, Liste *hashtable) {
   int index = hash(mot);
   if(hashtable[index] == NULL) {
     //Key unused: create new entry
-    hashtable[index] = (Liste) calloc(1, sizeof(*hashtable[index]));
-    hashtable[index]->val = mot;
-    //printf("\nNew entry: %s", hashtable[index]->val);
-    hashtable[index]->suiv = NULL;
+    hashtable[index] = ajout_tete(mot, taille_mot, NULL);
   } else {
     //Collision: add to list
-    hashtable[index]  = ajout_tete(mot, hashtable[index]);
+    hashtable[index]  = ajout_tete(mot, taille_mot, hashtable[index]);
     //printf("\nAdded to list: %s", mot); 
   }
   //Count actual size of Hashtable
@@ -67,7 +64,7 @@ Liste *creer_hashtable(char *f) {
       for(i = 0; i < vraie_longueur_mot; i++) {
 	cpymot[i] = mot[i];
       }
-      ajout_mot(hashtable, cpymot);
+      ajout_mot(cpymot, vraie_longueur_mot, hashtable);
     }
   }
   fclose(fichier);
@@ -99,7 +96,7 @@ Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
       if(head_of_collision_list) {
 	if(recherche_liste(mot, head_of_collision_list)) {
 	  puts("WE HERE?");
-	  liste_voisins = ajout_tete(voisin_mot, liste_voisins);
+	  liste_voisins = ajout_tete(voisin_mot, strlen(mot), liste_voisins);
 	}
       }
     }

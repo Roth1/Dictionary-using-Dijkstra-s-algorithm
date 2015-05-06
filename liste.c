@@ -8,31 +8,27 @@ int est_vide(Liste L) {
   return !L;
 }
 
-Liste ajout_tete(unsigned char *e, Liste L) {
+/*************************************************************************
+ * Add-To-List-Function: Adds an element to the head of a list.          *
+ *************************************************************************/
+Liste ajout_tete(unsigned char *e, unsigned int taille_mot, Liste L) {
+  unsigned int i = 0;
   Liste p = (Liste) calloc(1, sizeof(*p));
   if(p == NULL) {
     return NULL;
   }
-  p->val = e;
+  p->val = (unsigned char *)calloc(taille_mot, sizeof(unsigned char));
+  for(i = 0; i < taille_mot; i++) {
+    p->val[i] = e[i];
+  }
   p->suiv = L;
   return p;
 }
 
-/*
-Liste rech_chaine(char *chaine, Liste L) {
-  Liste p = L;
-  while(!est_vide(p) && (chaine, compare_chaine(chaine, &(p->val)) != 0)) p = p->suiv;
-  return p;
-}
 
-
-Liste rech(unsigned char *e, Liste L) {
-  Liste p = L;
-  while(!est_vide(p) && (compare(&(p->val), &e) != 0)) p = p->suiv;
-  return p;
-}
-*/
-
+/*************************************************************************
+ * Search-List-Function: Iterates through a list looking for a word.     *
+ *************************************************************************/
 int recherche_liste(unsigned char *e, Liste L) {
   Liste p = L;
   while(p != NULL) {
@@ -45,6 +41,10 @@ int recherche_liste(unsigned char *e, Liste L) {
   return 0;
 }
 
+
+/*************************************************************************
+ * Get-List-Size-Function: Returns the size of a list.                   *
+ *************************************************************************/
 int taille_liste(Liste L) {
   unsigned int i = 0;
   while(!est_vide(L)) {

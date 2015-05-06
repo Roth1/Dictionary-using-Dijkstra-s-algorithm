@@ -14,7 +14,7 @@
 int hash(unsigned char *str);
 
 //Add an element to the hashtable
-void ajout_mot(Liste *hashtable, unsigned char *mot);
+void ajout_mot(unsigned char *mot, unsigned int taille_mot, Liste *hashtable);
 
 //Create a Hashtable
 Liste *creer_hashtable(char *f);
