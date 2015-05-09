@@ -29,11 +29,11 @@ Liste ajout_tete(unsigned char *e, unsigned int taille_mot, Liste L) {
 /*************************************************************************
  * Search-List-Function: Iterates through a list looking for a word.     *
  *************************************************************************/
-int recherche_liste(unsigned char *e, Liste L) {
+int recherche_liste(unsigned char *e, unsigned int longueur_mot, Liste L) {
   Liste p = L;
   while(p != NULL) {
-    printf("\n%s", (L->val));
-    if(p->val == e) {
+    //TEST IF SAME SIZE
+    if(compare_mots(e, p->val, longueur_mot)) {
       return 1;
     }
     p = p->suiv;
@@ -53,3 +53,15 @@ int taille_liste(Liste L) {
   }
   return i;
 }
+
+
+unsigned short compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned int taille_mot) {
+  unsigned int i = 0;
+  for(i = 0; i < taille_mot; i++) {
+      if(mot1[i] != mot2[i]) {
+	return 0;
+      }
+  }
+  return 1;
+}
+   

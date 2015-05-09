@@ -78,19 +78,19 @@ Liste *creer_hashtable(char *f) {
 Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
   unsigned int i;
   unsigned char c;
-  unsigned char voisin_mot[strlen(mot)];
+  unsigned int longueur_mot = strlen(mot);
+  unsigned char voisin_mot[longueur_mot];
   Liste head_of_collision_list = NULL;
   static Liste liste_voisins = NULL;
-  for(i = 0; i < strlen(mot); i++) {
+  for(i = 0; i < longueur_mot; i++) {
     for(c = 'a'; c <= 'z'; c++) {
       strcpy(voisin_mot, mot);
       voisin_mot[i] = c;
       head_of_collision_list = hashtable[hash(voisin_mot)];
-      printf("\n%s", head_of_collision_list->val);
+      //printf("\n%s", head_of_collision_list->val);
       if(head_of_collision_list) {
-	if(recherche_liste(mot, head_of_collision_list)) {
-	  puts("WE HERE?");
-	  liste_voisins = ajout_tete(voisin_mot, strlen(mot), liste_voisins);
+	if(recherche_liste(mot, longueur_mot, head_of_collision_list)) {
+	  liste_voisins = ajout_tete(voisin_mot, longueur_mot, liste_voisins);
 	}
       }
     }

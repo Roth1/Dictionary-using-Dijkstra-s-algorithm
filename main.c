@@ -11,7 +11,7 @@ int main() {
   printf("\nLength of neighbor list: %d\n", taille_liste(l));
   while(l != NULL) {
     printf("%s\n", l->val);
-    l++;
+    l=l->suiv;
     }
   printf("\nEnding Theme\n\n");
   return 0;
