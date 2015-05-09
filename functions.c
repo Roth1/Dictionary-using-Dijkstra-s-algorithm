@@ -88,8 +88,8 @@ Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
       voisin_mot[i] = c;
       head_of_collision_list = hashtable[hash(voisin_mot)];
       //printf("\n%s", head_of_collision_list->val);
-      if(head_of_collision_list) {
-	if(recherche_liste(mot, longueur_mot, head_of_collision_list)) {
+      if(head_of_collision_list && !compare_mots(mot, voisin_mot, longueur_mot)) {
+	if(recherche_liste(voisin_mot, longueur_mot, head_of_collision_list)) {
 	  liste_voisins = ajout_tete(voisin_mot, longueur_mot, liste_voisins);
 	}
       }

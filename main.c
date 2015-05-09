@@ -6,7 +6,7 @@ int main() {
   Liste *hashtable = creer_hashtable("./mots/umot4.txt");
   int taille = taille_liste(hashtable[411]);
   printf("\n\nLength of '%s' list: %d\n", hashtable[411]->val, taille);
-  Liste proche_voisins = get_proche_voisins("acta", hashtable);
+  Liste proche_voisins = get_proche_voisins("rage", hashtable);
   Liste l = proche_voisins;
   printf("\nLength of neighbor list: %d\n", taille_liste(l));
   while(l != NULL) {
