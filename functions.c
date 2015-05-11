@@ -97,3 +97,40 @@ Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
   }
   return liste_voisins;
 }
+
+
+/*************************************************************************
+ * Find closest path between two words using Dijkstra's algorithm        *
+ *************************************************************************/
+Liste get_court_chemin(unsigned char *mot_debut, unsigned char *mot_fin, Liste *hashtable) {
+  Liste p = NULL;
+  unsigend int i = 0;
+  for(i = 0; i < 1000; i++) {
+    if( hashtable[i] != NULL) {
+      for(p = hashtable[i]; p != NULL; p = p->suiv) {
+	//not correct
+	sommet_cout s_c = (sommet_cout)calloc(1, sizeof(*sommet_cout));
+	s_c->cout = INTMAX;
+	s_c->visited = 0;
+	s_v->suiv = NULL;
+      }
+    }
+  }
+  sommet_cout perez;
+  visited_list = NULL;
+  to_visit_list = proche_voisins?;
+  do {
+    //Liste p_v = get_proche_voisins(mot_debut, hashtable);
+
+    Liste k = NULL;
+    for(k = p_v; k != NULL; k = k->suiv) {
+      if(k->cout > (j->cout + cout_chemin)) {
+	k->cout = j->cout + cout_chemin;
+	pere_k = j;
+      }
+    }
+  } while((j->visited == 0) && (j->suiv->cout != INTMAX));
+  return liste_chemin;
+}
+    
+    

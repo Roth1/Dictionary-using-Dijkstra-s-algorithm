@@ -13,7 +13,7 @@ int est_vide(Liste L) {
  *************************************************************************/
 Liste ajout_tete(unsigned char *e, unsigned int taille_mot, Liste L) {
   unsigned int i = 0;
-  Liste p = (Liste) calloc(1, sizeof(*p));
+  Liste p = (Liste)calloc(1, sizeof(*p));
   if(p == NULL) {
     return NULL;
   }
