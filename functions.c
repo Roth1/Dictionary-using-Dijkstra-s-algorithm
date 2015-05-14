@@ -75,6 +75,7 @@ Liste *creer_hashtable(char *f) {
 /*************************************************************************
  * Find all neighbors with a distance of 1.                              *
  *************************************************************************/
+/*
 Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
   unsigned int i;
   unsigned char c;
@@ -91,6 +92,28 @@ Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
       if(head_of_collision_list && !compare_mots(mot, voisin_mot, longueur_mot)) {
 	if(recherche_liste(voisin_mot, longueur_mot, head_of_collision_list)) {
 	  liste_voisins = ajout_tete(voisin_mot, longueur_mot, liste_voisins);
+	}
+      }
+    }
+  }
+  return liste_voisins;
+}
+*/
+Cout_Liste get_proche_voisins_cout(unsigned char *mot, Cout_Liste graphe_liste) {
+  unsigned int i;
+  unsigned char c;
+  unsigned int longueur_mot = strlen(mot);
+  unsigned char voisin_mot[longueur_mot];
+  //Liste head_of_collision_list = NULL;
+  static Cout_Liste liste_voisins = NULL;
+  for(i = 0; i < longueur_mot; i++) {
+    for(c = 'a'; c <= 'z'; c++) {
+      strcpy(voisin_mot, mot);
+      voisin_mot[i] = c;
+      if(!compare_mots(mot, voisin_mot, longueur_mot)) {
+	Cout_Liste j = recherche_cout_liste(voisin_mot, longueur_mot, graphe_liste);
+	if(j != NULL) {
+	  liste_voisins = ajout_cout_tete(j->val, longueur_mot, j->cout, j->pere, liste_voisins);
 	}
       }
     }
@@ -127,17 +150,17 @@ Cout_Liste get_court_chemin(unsigned char *mot_debut, unsigned char *mot_fin, Li
   Cout_Liste j = NULL;
   do {
     j = trouve_sommet_min_cout(graphe_liste);
-    Liste k = NULL;
-    Liste dist1 = get_proche_voisins(j->val, hashtable);
+    Cout_Liste k = NULL;
+    Cout_Liste dist1 = get_proche_voisins_cout(j->val, graphe_liste);
     chemin_liste = ajout_cout_tete(j->val, longueur_mot, j->cout, j->pere, chemin_liste);
-    graphe_liste = supprime_cout_sommet(j, graphe_liste);
+    graphe_liste = supprime_cout_sommet(j->cout, graphe_liste);
     for(k = dist1; k != NULL; k = k->suiv) {
       if(k->cout > (j->cout + 1)) {
 	k->cout = j->cout + 1;
 	k->pere = j;
       }
     }
-  } while(recherche_cout_liste(mot_fin, longueur_mot, graphe_liste) && (j->cout != INT_MAX));
+  } while((recherche_cout_liste(mot_fin, longueur_mot, graphe_liste) != NULL) && (j->cout != INT_MAX));
   return chemin_liste;
 }
     

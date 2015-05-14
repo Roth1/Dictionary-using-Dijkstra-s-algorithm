@@ -106,7 +106,7 @@ Cout_Liste trouve_sommet_min_cout(Cout_Liste C_L) {
   return j;
 }
    
-Cout_Liste supprime_cout_sommet(Cout_Liste sommet, Cout_Liste C_L) {
+Cout_Liste supprime_cout_sommet(unsigned int min_cout, Cout_Liste C_L) {
   Cout_Liste j = C_L;
   if(j == NULL) {
     return NULL;
@@ -115,22 +115,24 @@ Cout_Liste supprime_cout_sommet(Cout_Liste sommet, Cout_Liste C_L) {
     free(j);
     return NULL;
   }
-  while(j->suiv != sommet) {
+  while((j->cout != min_cout) && j != NULL) {
     j = j->suiv;
   }
+  if(j == NULL) puts("ERROR!");
   Cout_Liste k = j->suiv->suiv;
   free(j->suiv);
   j->suiv = k;
   return C_L;
 }
-	  
-int recherche_cout_liste(unsigned char *e, unsigned int longueur_mot, Cout_Liste C_L) {
+
+
+Cout_Liste recherche_cout_liste(unsigned char *e, unsigned int longueur_mot, Cout_Liste C_L) {
   Cout_Liste j = C_L;
   while(j != NULL) {
     if((longueur_mot == strlen(j->val)) && compare_mots(e, j->val, longueur_mot)) {
-	return 1;
+	return j;
     }
     j =j->suiv;
   }
-  return 0;
+  return j;
 }
