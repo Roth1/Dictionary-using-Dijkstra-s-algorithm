@@ -31,10 +31,11 @@ Liste ajout_tete(unsigned char *e, unsigned int taille_mot, Liste L) {
  *************************************************************************/
 int recherche_liste(unsigned char *e, unsigned int longueur_mot, Liste L) {
   Liste p = L;
+  unsigned int longueur_mot_liste = 0;
   while(p != NULL) {
-    //TEST IF SAME SIZE
-    if(compare_mots(e, p->val, longueur_mot)) {
-      return 1;
+    longueur_mot_liste = strlen(p->val);
+    if((longueur_mot == longueur_mot_liste) && compare_mots(e, p->val, longueur_mot)) {
+	return 1;
     }
     p = p->suiv;
   }
@@ -55,7 +56,7 @@ int taille_liste(Liste L) {
 }
 
 
-unsigned short compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned int taille_mot) {
+unsigned char compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned int taille_mot) {
   unsigned int i = 0;
   for(i = 0; i < taille_mot; i++) {
       if(mot1[i] != mot2[i]) {
@@ -64,4 +65,72 @@ unsigned short compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned i
   }
   return 1;
 }
+
+
+Cout_Liste ajout_cout_tete(unsigned char *mot, unsigned int longueur_mot, unsigned int cout, Cout_Liste pere, Cout_Liste C_L) {
+  unsigned int i = 0;
+  Cout_Liste j = (Cout_Liste)calloc(1, sizeof(*j));
+  if(j == NULL) {
+    return NULL;
+  }
+  j->val = (unsigned char *)calloc(longueur_mot, sizeof(unsigned char));
+  for(i = 0; i < longueur_mot; i++) {
+    j->val[i] = mot[i];
+  }
+  j->cout = cout;
+  j->pere = pere;
+  j->suiv = C_L;
+}
+
+unsigned int trouve_min_cout(Cout_Liste C_L) {
+  unsigned int min_cout = 0;
+  Cout_Liste j = NULL;
+  j = C_L;
+  min_cout = j->cout;
+  j = j->suiv;
+  while(j->suiv != NULL) {
+    if(min_cout > j->cout) {
+      min_cout = j->cout;
+    }
+    j = j->suiv;
+  }
+  return min_cout;
+}
+
+Cout_Liste trouve_sommet_min_cout(Cout_Liste C_L) {
+  unsigned int min_cout = trouve_min_cout(C_L);
+  Cout_Liste j = C_L;
+  while(j->cout != min_cout) {
+    j = j->suiv;
+  }
+  return j;
+}
    
+Cout_Liste supprime_cout_sommet(Cout_Liste sommet, Cout_Liste C_L) {
+  Cout_Liste j = C_L;
+  if(j == NULL) {
+    return NULL;
+  }
+  if(j->suiv == NULL) {
+    free(j);
+    return NULL;
+  }
+  while(j->suiv != sommet) {
+    j = j->suiv;
+  }
+  Cout_Liste k = j->suiv->suiv;
+  free(j->suiv);
+  j->suiv = k;
+  return C_L;
+}
+	  
+int recherche_cout_liste(unsigned char *e, unsigned int longueur_mot, Cout_Liste C_L) {
+  Cout_Liste j = C_L;
+  while(j != NULL) {
+    if((longueur_mot == strlen(j->val)) && compare_mots(e, j->val, longueur_mot)) {
+	return 1;
+    }
+    j =j->suiv;
+  }
+  return 0;
+}

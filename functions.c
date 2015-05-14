@@ -102,35 +102,43 @@ Liste get_proche_voisins(unsigned char *mot, Liste *hashtable) {
 /*************************************************************************
  * Find closest path between two words using Dijkstra's algorithm        *
  *************************************************************************/
-Liste get_court_chemin(unsigned char *mot_debut, unsigned char *mot_fin, Liste *hashtable) {
+Cout_Liste get_court_chemin(unsigned char *mot_debut, unsigned char *mot_fin, Liste *hashtable) {
+  if(strlen(mot_debut) != strlen(mot_fin)) {
+    return NULL;
+  }
+  unsigned int longueur_mot = strlen(mot_debut);
+  Cout_Liste chemin_liste = NULL;
+  Cout_Liste graphe_liste = NULL;
   Liste p = NULL;
-  unsigend int i = 0;
+  unsigned int i = 0;
   for(i = 0; i < 1000; i++) {
     if( hashtable[i] != NULL) {
       for(p = hashtable[i]; p != NULL; p = p->suiv) {
-	//not correct
-	sommet_cout s_c = (sommet_cout)calloc(1, sizeof(*sommet_cout));
-	s_c->cout = INTMAX;
-	s_c->visited = 0;
-	s_v->suiv = NULL;
+	if(longueur_mot == strlen(p->val)) {
+	  if(compare_mots(mot_debut, p->val, longueur_mot)) {
+	    graphe_liste = ajout_cout_tete(p->val, longueur_mot, 0, NULL, graphe_liste);
+	  } else {
+	    graphe_liste = ajout_cout_tete(p->val, longueur_mot, INT_MAX, NULL, graphe_liste);
+	  }
+	}
       }
     }
   }
-  sommet_cout perez;
-  visited_list = NULL;
-  to_visit_list = proche_voisins?;
+  Cout_Liste j = NULL;
   do {
-    //Liste p_v = get_proche_voisins(mot_debut, hashtable);
-
+    j = trouve_sommet_min_cout(graphe_liste);
     Liste k = NULL;
-    for(k = p_v; k != NULL; k = k->suiv) {
-      if(k->cout > (j->cout + cout_chemin)) {
-	k->cout = j->cout + cout_chemin;
-	pere_k = j;
+    Liste dist1 = get_proche_voisins(j->val, hashtable);
+    chemin_liste = ajout_cout_tete(j->val, longueur_mot, j->cout, j->pere, chemin_liste);
+    graphe_liste = supprime_cout_sommet(j, graphe_liste);
+    for(k = dist1; k != NULL; k = k->suiv) {
+      if(k->cout > (j->cout + 1)) {
+	k->cout = j->cout + 1;
+	k->pere = j;
       }
     }
-  } while((j->visited == 0) && (j->suiv->cout != INTMAX));
-  return liste_chemin;
+  } while(recherche_cout_liste(mot_fin, longueur_mot, graphe_liste) && (j->cout != INT_MAX));
+  return chemin_liste;
 }
     
     
