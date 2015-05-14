@@ -44,7 +44,7 @@ Liste *creer_hashtable(char *f) {
   fichier = fopen(f,"r+");
   //Error if file cannot be opened
   if(!fichier) {
-    perror("Unable to open/read text file!");
+    perror("Unable to open/read text file.");
     return NULL;
   }
   //Hashtable needs to have a static position in memory

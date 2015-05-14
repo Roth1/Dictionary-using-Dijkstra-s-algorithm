@@ -2,10 +2,10 @@
 #define FUNCTIONS_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdlib.h>
 #include "liste.h"
 
 #define TAILLE_HASHTABLE 1000
