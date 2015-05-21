@@ -32,7 +32,8 @@ unsigned char compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned in
 Cout_Liste ajout_cout_tete(unsigned char *mot, unsigned int longueur_mot, unsigned int cout, Cout_Liste pere, Cout_Liste C_L);
 unsigned int trouve_min_cout(Cout_Liste C_L);
 Cout_Liste trouve_sommet_min_cout(Cout_Liste C_L);
-Cout_Liste supprime_cout_sommet(unsigned int min_cout, Cout_Liste C_L);
+Cout_Liste supprime_cout_sommet(Cout_Liste k, Cout_Liste C_L);
 Cout_Liste recherche_cout_liste(unsigned char *e, unsigned int longueur_mot, Cout_Liste C_L);
+
 
 #endif

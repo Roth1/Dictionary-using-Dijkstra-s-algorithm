@@ -87,26 +87,32 @@ unsigned int trouve_min_cout(Cout_Liste C_L) {
   Cout_Liste j = NULL;
   j = C_L;
   min_cout = j->cout;
-  j = j->suiv;
+  //j = j->suiv;
   while(j->suiv != NULL) {
     if(min_cout > j->cout) {
       min_cout = j->cout;
     }
     j = j->suiv;
   }
+  //printf("MIN COUT !!! == %d\n", min_cout);
   return min_cout;
 }
 
 Cout_Liste trouve_sommet_min_cout(Cout_Liste C_L) {
   unsigned int min_cout = trouve_min_cout(C_L);
   Cout_Liste j = C_L;
-  while(j->cout != min_cout) {
+  while(j != NULL) {
+    if(j->cout == min_cout && min_cout != 2147483647) {
+      //printf("MIN MOT !!! == %s\n", j->val);
+      return j;
+    }
     j = j->suiv;
   }
-  return j;
+  puts("ERRRRRRRRRORRRRRR");
+  return NULL;
 }
    
-Cout_Liste supprime_cout_sommet(unsigned int min_cout, Cout_Liste C_L) {
+Cout_Liste supprime_cout_sommet(Cout_Liste k, Cout_Liste C_L) {
   Cout_Liste j = C_L;
   if(j == NULL) {
     return NULL;
@@ -115,13 +121,13 @@ Cout_Liste supprime_cout_sommet(unsigned int min_cout, Cout_Liste C_L) {
     free(j);
     return NULL;
   }
-  while((j->cout != min_cout) && j != NULL) {
+  while(j->suiv != k && j != NULL) {
     j = j->suiv;
   }
   if(j == NULL) puts("ERROR!");
-  Cout_Liste k = j->suiv->suiv;
+  Cout_Liste l = j->suiv->suiv;
   free(j->suiv);
-  j->suiv = k;
+  j->suiv = l;
   return C_L;
 }
 

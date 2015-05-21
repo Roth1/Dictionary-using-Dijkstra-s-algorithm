@@ -26,7 +26,7 @@ Liste *creer_hashtable(char *f);
 Cout_Liste get_proche_voisins_cout(unsigned char *mot, Cout_Liste graphe_liste);
 
 //Dijkstra's algorithm
-Cout_Liste get_court_chemin(unsigned char *mot_debut, unsigned char *mot_fin, Liste *hashtable);
+void get_court_chemin(unsigned char *mot_debut, unsigned char *mot_fin, Liste *hashtable);
 
 
 #endif
