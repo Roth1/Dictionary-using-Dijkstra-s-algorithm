@@ -16,6 +16,18 @@ int main() {
   //Cout_Liste l = recherche_cout_liste("gage", 4, graphe);
   //if(l == NULL) puts("\nBUZZKILL!!");
   //printf("\nLength of neighbor list: %d\n", taille_liste(l));
+
+  /*****
+TO OPTIMIZE:
+- do not use a list for the graph -> either original hashtable or hashtable[cout]
+- error-handling -> distance infinity, etc
+- we need to free() our calloc()s
+- optimize/merge/delete functions we do not need
+- better names
+- comment code
+- implement improvements -> see .pdf
+  *****/
+
   
   printf("\nEnding Theme...\n\n");
   return 0;
