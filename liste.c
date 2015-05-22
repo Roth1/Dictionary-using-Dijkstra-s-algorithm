@@ -1,17 +1,9 @@
 #include "liste.h"
 
-Liste creer_liste(void) { 
-  return NULL;
-}
-
-int est_vide(Liste L) {
-  return !L;
-}
-
-/*************************************************************************
- * Add-To-List-Function: Adds an element to the head of a list.          *
+/****************************************************************************************
+ *           *
  *************************************************************************/
-Liste ajout_tete(unsigned char *e, unsigned int taille_mot, Liste L) {
+Liste ajout_tete(const unsigned char *mot, const unsigned int taille_mot, Liste L) {
   unsigned int i = 0;
   Liste p = (Liste)calloc(1, sizeof(*p));
   if(p == NULL) {
@@ -19,22 +11,20 @@ Liste ajout_tete(unsigned char *e, unsigned int taille_mot, Liste L) {
   }
   p->val = (unsigned char *)calloc(taille_mot, sizeof(unsigned char));
   for(i = 0; i < taille_mot; i++) {
-    p->val[i] = e[i];
+    p->val[i] = mot[i];
   }
   p->suiv = L;
   return p;
 }
-
-
-/*************************************************************************
+/****************************************************************************************
  * Search-List-Function: Iterates through a list looking for a word.     *
  *************************************************************************/
-int recherche_liste(unsigned char *e, unsigned int longueur_mot, Liste L) {
+int recherche_liste(const unsigned char *mot, const unsigned int longueur_mot, const Liste L) {
   Liste p = L;
   unsigned int longueur_mot_liste = 0;
   while(p != NULL) {
     longueur_mot_liste = strlen(p->val);
-    if((longueur_mot == longueur_mot_liste) && compare_mots(e, p->val, longueur_mot)) {
+    if((longueur_mot == longueur_mot_liste) && compare_mots(mot, p->val, longueur_mot)) {
 	return 1;
     }
     p = p->suiv;
@@ -43,20 +33,21 @@ int recherche_liste(unsigned char *e, unsigned int longueur_mot, Liste L) {
 }
 
 
-/*************************************************************************
+/****************************************************************************************
  * Get-List-Size-Function: Returns the size of a list.                   *
  *************************************************************************/
-int taille_liste(Liste L) {
+int taille_liste(const Liste L) {
   unsigned int i = 0;
-  while(!est_vide(L)) {
-    L = L->suiv;
+  Liste p = L;
+  while(p != NULL) {
+    p = p->suiv;
     ++i;
   }
   return i;
 }
 
 
-unsigned char compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned int taille_mot) {
+unsigned char compare_mots(const unsigned char *mot1, const unsigned char *mot2, const unsigned int taille_mot) {
   unsigned int i = 0;
   for(i = 0; i < taille_mot; i++) {
       if(mot1[i] != mot2[i]) {
@@ -67,7 +58,7 @@ unsigned char compare_mots(unsigned char *mot1, unsigned char *mot2, unsigned in
 }
 
 
-Cout_Liste ajout_cout_tete(unsigned char *mot, unsigned int longueur_mot, unsigned int cout, Cout_Liste pere, Cout_Liste C_L) {
+Cout_Liste ajout_cout_tete(const unsigned char *mot, const unsigned int longueur_mot, unsigned int cout, Cout_Liste pere, Cout_Liste C_L) {
   unsigned int i = 0;
   Cout_Liste j = (Cout_Liste)calloc(1, sizeof(*j));
   if(j == NULL) {
@@ -82,7 +73,7 @@ Cout_Liste ajout_cout_tete(unsigned char *mot, unsigned int longueur_mot, unsign
   j->suiv = C_L;
 }
 
-unsigned int trouve_min_cout(Cout_Liste C_L) {
+unsigned int trouve_min_cout(const Cout_Liste C_L) {
   unsigned int min_cout = 0;
   Cout_Liste j = NULL;
   j = C_L;
@@ -98,44 +89,54 @@ unsigned int trouve_min_cout(Cout_Liste C_L) {
   return min_cout;
 }
 
-Cout_Liste trouve_sommet_min_cout(Cout_Liste C_L) {
+Cout_Liste trouve_sommet_min_cout(const Cout_Liste C_L) {
   unsigned int min_cout = trouve_min_cout(C_L);
   Cout_Liste j = C_L;
   while(j != NULL) {
-    if(j->cout == min_cout && min_cout != 2147483647) {
+    if(j->cout == min_cout) {
       //printf("MIN MOT !!! == %s\n", j->val);
       return j;
     }
     j = j->suiv;
   }
-  puts("ERRRRRRRRRORRRRRR");
+  puts("\n\nERROR: Liste incohérente!\n");
   return NULL;
 }
    
-Cout_Liste supprime_cout_sommet(Cout_Liste k, Cout_Liste C_L) {
-  Cout_Liste j = C_L;
-  if(j == NULL) {
+Cout_Liste supprime_cout_sommet(Cout_Liste j, Cout_Liste C_L) {
+  Cout_Liste g = C_L;
+  if(g == NULL) {
     return NULL;
   }
-  if(j->suiv == NULL) {
+  if((g->suiv == NULL)) {
+    free(g);
+    return NULL;
+  }
+  if(g == j) {
+    g = g->suiv;
     free(j);
-    return NULL;
+    return g;
   }
-  while(j->suiv != k && j != NULL) {
-    j = j->suiv;
+  while(g->suiv != j) {
+    g = g->suiv;
   }
-  if(j == NULL) puts("ERROR!");
-  Cout_Liste l = j->suiv->suiv;
-  free(j->suiv);
-  j->suiv = l;
-  return C_L;
+  if(g->suiv->suiv == NULL) {
+    free(j);
+    g->suiv = NULL;
+    return C_L;
+  } else {
+    Cout_Liste l = g->suiv->suiv;
+    free(j);
+    g->suiv = l;
+    return C_L;
+  }
 }
 
 
-Cout_Liste recherche_cout_liste(unsigned char *e, unsigned int longueur_mot, Cout_Liste C_L) {
+Cout_Liste recherche_cout_liste(const unsigned char *mot, const unsigned int longueur_mot, const Cout_Liste C_L) {
   Cout_Liste j = C_L;
   while(j != NULL) {
-    if((longueur_mot == strlen(j->val)) && compare_mots(e, j->val, longueur_mot)) {
+    if((longueur_mot == strlen(j->val)) && compare_mots(mot, j->val, longueur_mot)) {
 	return j;
     }
     j =j->suiv;
