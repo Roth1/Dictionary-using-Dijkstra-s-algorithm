@@ -8,7 +8,7 @@ Liste *change_chemin(void) {
   fflush(stdin);
   char nouveau_chemin[30];
   if(fgets(nouveau_chemin, 30, stdin) == NULL) {
-    perror("Error!");
+    perror("Error");
     return NULL;
   }
   unsigned int i = 0;
@@ -56,9 +56,9 @@ int hash(const unsigned char *str) {
 
 /****************************************************************************************
  * fonction pour ajouter un mot dans la table de hashage                                *
- * @param - mot:
- * @param - longueur_mot:
- * @param - hashtable:
+ * @param - mot: le mot à ajouter                                                       *
+ * @param - longueur_mot: le longueur du mot à ajouter                                  *
+ * @param - hashtable: la table de hashage crée, dans laquelle on ajoute le mot         *
  ****************************************************************************************/
 void ajout_mot(const unsigned char *mot, const unsigned int taille_mot, Liste *hashtable) {
   int index = hash(mot);
@@ -115,8 +115,8 @@ Liste *creer_hashtable(const char *f) {
 
 /****************************************************************************************
  * fonction pour créer un graphe des mots avec leur cout et père                        *
- * @param - longueur_mot:
- * @param - hashtable:
+ * @param - longueur_mot: le longueur du mot de départ                                  *                                
+ * @param - hashtable: la table de hashage crée                                         *
  ****************************************************************************************/
 Cout_Liste creer_graphe(const unsigned int longueur_mot, const Liste *hashtable) {
   Cout_Liste graphe_liste = NULL;
@@ -138,8 +138,8 @@ Cout_Liste creer_graphe(const unsigned int longueur_mot, const Liste *hashtable)
 
 /****************************************************************************************
  * fonction qui trouve tous les proches voisins à distance 1 - les donne comme liste    *
- * @param - mot:
- * @param - hashtable:
+ * @param - mot: le mot pour lequel on cherche les proches voisins                      *
+ * @param - hashtable: la table de hashage crée                                         *
  ****************************************************************************************/
 Liste get_proche_voisins(const unsigned char *mot, const Liste *hashtable) {
   unsigned int i;
@@ -167,10 +167,10 @@ Liste get_proche_voisins(const unsigned char *mot, const Liste *hashtable) {
 
 /****************************************************************************************
  * fonction pour trouver le plus court chemin en utilisant l'algorithme de Dijkstra     *
- * @param - mot_depart:
- * @param - mot_cible:
- * @param - hashtable:
- *****************************************************************************************/
+ * @param - mot_depart: le mot de départ                                                *
+ * @param - mot_cible: le mot cible                                                     *
+ * @param - hashtable: la table de hashage crée                                         *
+ ****************************************************************************************/
 void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_cible, const Liste *hashtable) {
   if(strlen(mot_depart) != strlen(mot_cible)) {
     puts("\n\nThe words you have entered have different lengths and are thus not comparable!\n");
@@ -217,5 +217,52 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
     printf("\t%s\t%d\n", l->val, l->cout);
     l=l->pere;
     }
+  puts("\n\nPoussez RETURN pour rentrer dans le menu.\n");
   return;
 }
+
+/****************************************************************************************
+ * fontion pour lire les mots et trouver le chemin en utilisant get_proche_voisins()    *
+ * @param - hashtable: la table de hashage crée                                         *
+ ****************************************************************************************/
+void trouve_chemin(const Liste *hashtable) {
+  char mot_d[MAX_TAILLE_MOT+1];
+  char mot_c[MAX_TAILLE_MOT+1];
+  fflush(stdin);
+  puts("\nEntrez votre mot de départ:\t");
+  if(fgets(mot_d, MAX_TAILLE_MOT+1, stdin) == NULL) {
+    perror("\nError");
+    return;
+  }
+  fflush(stdin);
+  puts("\nEntrez votre mot cible:\t");
+  if(fgets(mot_c, MAX_TAILLE_MOT+1, stdin) == NULL) {
+    perror("\nError");
+    return;
+  }
+  
+  unsigned int i = 0;
+  for(i = 0; i < MAX_TAILLE_MOT+1; i++) {
+    if(mot_d[i] == '\n') {
+      mot_d[i] = '\0';
+      break;
+    }
+  }
+  char mot_depart[i+1];
+  strcpy(mot_depart, mot_d);
+  
+  unsigned int k = 0;
+  for(k = 0; k < MAX_TAILLE_MOT+1; k++) {
+    if(mot_c[k] == '\n') {
+      mot_c[k] = '\0';
+      break;
+    }
+  }
+  char mot_cible[k+1];
+  strcpy(mot_cible, mot_c);
+
+  puts("\n\n");
+  get_court_chemin(mot_depart, mot_cible, hashtable);
+}
+  
+  

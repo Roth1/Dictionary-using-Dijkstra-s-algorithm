@@ -14,23 +14,25 @@
 //fonction pour changer le chemin
 Liste *change_chemin(void);
 
-//Hash-Function
+//fonction de hashage
 int hash(const unsigned char *str);
 
-//Add an element to the hashtable
+//fonction pour ajouter un mot dans la table de hashage
 void ajout_mot(const unsigned char *mot, const unsigned int longueur_mot, Liste *hashtable);
 
-//Create a Hashtable
+//fonction pour créer une table de hashage
 Liste *creer_hashtable(const char *f);
 
+//fonction pour créer le graphe
 Cout_Liste creer_graphe(const unsigned int longueur_mot, const Liste *hashtable);
 
-//Find close neighbors
+//fonction pour trouver les voisins à distance 1
 Liste get_proche_voisins(const unsigned char *mot, const Liste *hashtable);
-//Cout_Liste get_proche_voisins_cout(unsigned char *mot, Cout_Liste graphe_liste);
 
-//Dijkstra's algorithm
+//fonction qui trouve le plus court chemin en utilisant Dijkstra's algorithm
 void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_cible, const Liste *hashtable);
 
+//fontion pour lire les mots et trouver le chemin en utilisant get_proche_voisins()
+void trouve_chemin(const Liste *hashtable);
 
 #endif

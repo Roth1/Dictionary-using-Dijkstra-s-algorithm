@@ -6,45 +6,42 @@
 int main() {
   //créer la table de hashage
   Liste *hashtable = creer_hashtable("./mots/ufrancais.txt");
-
+  //salutation
   printf("\n\n");
   printf("\n\n");
-  printf("\n***********************************************************************************************");
-  printf("\n*                                                                                             *");
-  printf("\n*                               MESDAMES, MESSIEURS, BONJOUR !                                *");
-  printf("\n*   Ce jeux vous permet de trouver le plus court chemin entre deux mots d'une dictionnaire!   *");
-  printf("\n*                                                                                             *");
-  printf("\n***********************************************************************************************\n");
-  //entrer boucle du menue
+  printf("\n**********************************************************************************************");
+  printf("\n*                                                                                            *");
+  printf("\n*                               MESDAMES, MESSIEURS, BONJOUR !                               *");
+  printf("\n*   Ce jeu vous permet de trouver le plus court chemin entre deux mots d'un dictionnaire!    *");
+  printf("\n*                                                                                            *");
+  printf("\n**********************************************************************************************\n");
+  //entrer la boucle du menue
   char input;
   do {
+    printf("\n_____________________________________________________________________________________________");
     printf("\n\nVeuillez entrer: \t [0]                    -> pour entrer les mots et trouver le chemin");
-    printf("\n                 \t [1]                    -> pour changer le chemin de la source (*.txt)");
+    printf("\n                 \t [1]                    -> pour changer le chemin de la source *.txt");
     printf("\n                 \t [tous les autres]      -> pour quitter le programme");
     printf("\n\n");
-    printf("\n\nEntrez-vous votre choix:\t");
+    printf("\n\nEntrez votre choix:\t");
     //l'entrée
-    //fseek(stdin,0,SEEK_END);
     input = getchar();
     getchar();
-    putchar(input);
-    //soit on cherche le plus court chemin entre deux mots
-    //soit on change le chemin de la source *.txt
+    //soit on cherche le plus court chemin, soit on change le chemin de la source, soit on quitte
     switch(input) {
     case '0':
-      printf("\nTrouver le plus court chemin:\n");
-      //trouve_chemin(hashtable);
-      get_court_chemin("bonne", "femme", hashtable);
+      printf("\n*** Trouver le plus court chemin ***\n");
+      trouve_chemin(hashtable);
+      getchar();
       break;
     case '1':
-      printf("\nChanger le chemin de la source:\nEntrez-vous le nouveau chemin:\t");
+      printf("\n*** Changer le chemin de la source ***\n\nEntrez-vous le nouveau chemin:\t");
       //free_hash(hashtable)
       if(change_chemin() != NULL) {
 	hashtable = change_chemin();
       }
       break;
     default:
-      printf("\n");
       input = '9';
       //free_hash(hashtable);
       break;
@@ -54,7 +51,6 @@ int main() {
   /*****
 TO OPTIMIZE:
 - do not use a list for the graph -> either original hashtable or hashtable[cout]
-- error-handling -> distance infinity, etc
 - we need to free() our calloc()s
 - optimize/merge/delete functions we do not need
 - better names
@@ -62,6 +58,6 @@ TO OPTIMIZE:
 - implement improvements -> see .pdf
   *****/
   
-  printf("\nEnding Theme...\n\n");
+  printf("\nVous avez quitté le programme.\nMerci et bonne journée!\n\n");
   return 0;
 }
