@@ -16,7 +16,7 @@ int main() {
   }
   */
   
-  get_court_chemin("antigel", "recurez", hashtable);
+  get_court_chemin("bonne", "femme", hashtable);
 
   //Cout_Liste l = recherche_cout_liste("gage", 4, graphe);
   //printf("\nLength of neighbor list: %d\n", taille_liste(l));

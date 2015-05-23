@@ -4,15 +4,10 @@ University Project: Implementing Dijkstra's algorithm in a dictionary (French)
 
 ______________________________________________________________________________
 
-Deuxième séance:	+La table de hachage marche
-	                +Dijksta marche
-
-Troisième séance:	+Le programme trouve les chemins
-				          +Optimisation
-				          +Commenter, améliorer le code
-
-Quatrième séance:	+Création de la documentation
-
+This C-program reads a *.txt and creates a hashtable.
+This 'dictionary' is used to find the closest path
+between two words by only changing one letter at a
+time and checking if this 'neighboring word' exists.
 
 ______________________________________________________________________________
-Created by Mohamed & Roth1.
+Created by Roth1.
