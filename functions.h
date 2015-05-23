@@ -11,6 +11,8 @@
 #define TAILLE_HASHTABLE 1000
 #define MAX_TAILLE_MOT 26
 
+//fonction pour changer le chemin
+Liste *change_chemin(void);
 
 //Hash-Function
 int hash(const unsigned char *str);

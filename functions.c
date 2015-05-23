@@ -2,6 +2,42 @@
 
 
 /****************************************************************************************
+ * fonction pour changer le chemin - donne le nouveau chemin                            *
+ ****************************************************************************************/
+Liste *change_chemin(void) {
+  fflush(stdin);
+  char nouveau_chemin[30];
+  if(fgets(nouveau_chemin, 30, stdin) == NULL) {
+    perror("Error!");
+    return NULL;
+  }
+  unsigned int i = 0;
+  for(i = 0; i < 30; i++) {
+    if(nouveau_chemin[i] == '\n') {
+      nouveau_chemin[i] = '\0';
+      break;
+    }
+  }
+  char chemin[i+1];
+  unsigned int j = 0;
+  for(j = 0; j < i+1; j++) {
+    chemin[j] = nouveau_chemin[j];
+  }
+  //check
+  if(chemin == NULL) {
+    puts("-> Impossible de créer une table de hashage!\n");
+    return NULL;
+  }
+  if(creer_hashtable(chemin) == NULL) {
+    puts("-> Impossible de créer une table de hashage!\n");
+    return NULL;
+  } else {
+    return creer_hashtable(chemin);  
+  }
+}
+
+
+/****************************************************************************************
  * fonction de hashage - donne la valeur de hashage                                     *
  * @param - str:  le mot pour lequel on crée une valeur de hashage                      *
  ****************************************************************************************/
@@ -49,7 +85,7 @@ Liste *creer_hashtable(const char *f) {
   fichier = fopen(f,"r+");
   //Error if file cannot be opened
   if(!fichier) {
-    perror("Unable to open/read text file.");
+    perror("Impossible de lire/ouvrir le fichier");
     return NULL;
   }
   //Hashtable needs to have a static position in memory
