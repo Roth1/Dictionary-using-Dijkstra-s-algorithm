@@ -1,13 +1,12 @@
 #Source-Files & Object-Files
-SRCS = main.c functions.c liste.c
+SRCS = main.c fonctions.c sommet.c
 OBJS = $(SRCS: .c = .o)
-DEPS = functions.h liste.h
+DEPS = fonctions.h sommet.h
 
 #Compiler & Flags
 CC = gcc
 CFLAGS = -I. -Wall -Werror
 LDFLAGS = -lm
-DEPS = liste.h functions.h
 
 #Executable
 EXEC = dict

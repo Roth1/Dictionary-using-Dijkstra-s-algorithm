@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "functions.h"
-#include "liste.h"
+#include "fonctions.h"
+#include "sommet.h"
 
 int main() {
   //créer la table de hashage
-  Liste *hashtable = creer_hashtable("./mots/ufrancais.txt");
+  Sommet *hashtable = creer_hashtable("./mots/ufrancais.txt");
   //salutation
   printf("\n\n");
   printf("\n\n");
@@ -36,22 +36,20 @@ int main() {
       break;
     case '1':
       printf("\n*** Changer le chemin de la source ***\n\nEntrez-vous le nouveau chemin:\t");
-      //free_hash(hashtable)
       if(change_chemin() != NULL) {
+	free_hashtable(hashtable);
 	hashtable = change_chemin();
       }
       break;
     default:
       input = '9';
-      //free_hash(hashtable);
       break;
     }
   } while(input != '9');
-
+  //libérer la mémoire
+  free_hashtable(hashtable);
   /*****
 TO OPTIMIZE:
-- do not use a list for the graph -> either original hashtable or hashtable[cout]
-- we need to free() our calloc()s
 - optimize/merge/delete functions we do not need
 - better names
 - comment code
