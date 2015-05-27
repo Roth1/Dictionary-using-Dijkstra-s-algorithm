@@ -5,25 +5,30 @@
  * fonction pour changer le chemin - donne le nouveau chemin                            *
  ****************************************************************************************/
 Sommet *change_chemin(void) {
+  //nettoyer l'entrée
   fflush(stdin);
+  //l'entrée (maximale)
   char nouveau_chemin[30];
+  //lire le nouveau chemin
   if(fgets(nouveau_chemin, 30, stdin) == NULL) {
-    perror("Error");
+    perror("Erreur");
     return NULL;
   }
   unsigned int i = 0;
   for(i = 0; i < 30; i++) {
+    //determiner la taille réelle du string
     if(nouveau_chemin[i] == '\n') {
       nouveau_chemin[i] = '\0';
       break;
     }
   }
+  //i+1 est égal à la taille du string (chemin)
   char chemin[i+1];
   unsigned int j = 0;
   for(j = 0; j < i+1; j++) {
     chemin[j] = nouveau_chemin[j];
   }
-  //check
+  //vérifier si le chemin est bon
   if(chemin == NULL) {
     puts("-> Impossible de créer une table de hashage!\n");
     return NULL;
@@ -32,6 +37,7 @@ Sommet *change_chemin(void) {
     puts("-> Impossible de créer une table de hashage!\n");
     return NULL;
   } else {
+    //créer la table de hashage
     return creer_hashtable(chemin);  
   }
 }
@@ -49,7 +55,6 @@ int hash(const unsigned char *str) {
   for(i = 0; i < k; i++) {
     hash_value = (hash_value * multiplier + str[i]) % TAILLE_HASHTABLE;
   }
-  //printf( "\nhash_value: %d\n", hash_value);
   return hash_value;
 }
 
@@ -63,15 +68,12 @@ int hash(const unsigned char *str) {
 void ajout_mot(const unsigned char *mot, const unsigned int taille_mot, Sommet *hashtable) {
   int index = hash(mot);
   if(hashtable[index] == NULL) {
-    //Key unused: create new entry
+    //clé pas encore utilisé: crée une nouvelle entrée
     hashtable[index] = ajout_tete(mot, taille_mot, NULL);
   } else {
-    //Collision: add to list
+    //collision -> ajoute le sommet à la liste
     hashtable[index]  = ajout_tete(mot, taille_mot, hashtable[index]);
-    //printf("\nAdded to list: %s", mot); 
   }
-  //Count actual size of Hashtable
-  //taille_table++;
 }
 
 
@@ -81,20 +83,19 @@ void ajout_mot(const unsigned char *mot, const unsigned int taille_mot, Sommet *
  ****************************************************************************************/
 Sommet *creer_hashtable(const char *f) {
   FILE *fichier = NULL;
-  //Open a text file with path+name f
+  //ouvre un fichier *.txt avec chemin + nom
   fichier = fopen(f,"r+");
-  //Error if file cannot be opened
+  //Erreur
   if(!fichier) {
     perror("Impossible de lire/ouvrir le fichier");
     return NULL;
   }
-  //Hashtable needs to have a static position in memory
+  //table de hashage va avoir une position statique/constante dans la mémoire
   static Sommet hashtable[TAILLE_HASHTABLE];
-  //Keep track of how many elements we add
-  //static int taille_table = 0;
-  //Read text file
+  //lit le fichier *.txt
   char mot[MAX_TAILLE_MOT];
   while(fgets(mot, MAX_TAILLE_MOT + 1, fichier) != NULL) {
+    //seulement ajoute des vrais mots avec leurs vrais longueurs
     if(mot[0] != '\n') {
       unsigned int vraie_longueur_mot = 0;
       unsigned int i = 0;
@@ -105,12 +106,16 @@ Sommet *creer_hashtable(const char *f) {
       for(i = 0; i < vraie_longueur_mot; i++) {
 	cpymot[i] = mot[i];
       }
+      //ajoute le mot dans la table de hashage (comme sommet)
       ajout_mot(cpymot, vraie_longueur_mot, hashtable);
     }
   }
+  //ferme le fichier
   fclose(fichier);
+  //retourne la table de hashage
   return hashtable;
 }
+
 
 /****************************************************************************************
  * fonction pour la libération de la mémoire (table de hashage)                         *
@@ -122,6 +127,7 @@ void free_hashtable(Sommet *hashtable) {
   for(i = 0; i < 1000; i++) {
     if(hashtable[i] != NULL) {
       p = hashtable[i];
+      //free() toute la liste de collision
       while(hashtable[i]->suiv != NULL) {
 	hashtable[i] = hashtable[i]->suiv;
         free(p->val);
@@ -134,29 +140,6 @@ void free_hashtable(Sommet *hashtable) {
   }
 }
 
-
-/****************************************************************************************
- * fonction pour créer un graphe des mots avec leur cout et père                        *
- * @param - longueur_mot: le longueur du mot de départ                                  *                                
- * @param - hashtable: la table de hashage créée                                        *
- ****************************************************************************************/
-/*Cout_Sommet *creer_graphe(const unsigned int longueur_mot, const Sommet *hashtable) {
-  Cout_Sommet graphe_hashtable[TAILLE_HASHTABLE];
-  Sommet p = NULL;
-  unsigned int i = 0;
-  for(i = 0; i < 1000; i++) {
-    if(hashtable[i] != NULL) {
-      for(p = hashtable[i]; p != NULL; p = p->suiv) {
-	if(longueur_mot == strlen(p->val)) {
-	    graphe_hashtable[i] = ajout_cout_tete(p->val, longueur_mot, INT_MAX, NULL, graphe_hashtable[i]);
-	    //printf("\n%s",p->val);
-	}
-      }
-    }
-  }
-  return graphe_hashtable;
-}
-*/
 
 /****************************************************************************************
  * fonction pour la libération de la mémoire (table de hashage - cout)                  *
@@ -168,6 +151,7 @@ void free_cout_hashtable(Cout_Sommet *hashtable) {
   for(i = 0; i < 1000; i++) {
     if(hashtable[i] != NULL) {
       p = hashtable[i];
+      //free() toute la liste de collision
       while(hashtable[i]->suiv != NULL) {
 	hashtable[i] = hashtable[i]->suiv;
         free(p->val);
@@ -182,19 +166,19 @@ void free_cout_hashtable(Cout_Sommet *hashtable) {
 
 
 /****************************************************************************************
- * fonction pour la libération de la mémoire (graphe)                                   *
+ * fonction pour la libération de la mémoire (liste des éléments du type Cout_Sommet)   *
  * @param - graphe_liste: une cout-liste                                                *
  ****************************************************************************************/
-void free_graphe(Cout_Sommet graphe_liste) {
-  Cout_Sommet p = graphe_liste;
-  while(graphe_liste->suiv != NULL) {
-    graphe_liste = graphe_liste->suiv;
+void free_cout_liste(Cout_Sommet cout_liste) {
+  Cout_Sommet p = cout_liste;
+  while(cout_liste->suiv != NULL) {
+    cout_liste = cout_liste->suiv;
     free(p->val);
     free(p);
-    p = graphe_liste;
+    p = cout_liste;
   }
-  free(graphe_liste->val);
-  free(graphe_liste);
+  free(cout_liste->val);
+  free(cout_liste);
 }
     
 
@@ -210,14 +194,19 @@ Sommet get_proche_voisins(const unsigned char *mot, const Sommet *hashtable) {
   unsigned char voisin_mot[longueur_mot];
   Sommet head_of_collision_list = NULL;
   Sommet liste_voisins = NULL;
+  //change lettre après lettre
   for(i = 0; i < longueur_mot; i++) {
+    //change de 'a' à 'z'
     for(c = 'a'; c <= 'z'; c++) {
       strcpy(voisin_mot, mot);
       voisin_mot[i] = c;
+      //collision dans la table de hashage
       head_of_collision_list = hashtable[hash(voisin_mot)];
-      //printf("\n%s", head_of_collision_list->val);
+      //le mot de départ n'est pas un proche voisin
       if(head_of_collision_list && !compare_mots(mot, voisin_mot, longueur_mot)) {
+	//trouve le voisin dans la liste
 	if(recherche_liste(voisin_mot, longueur_mot, head_of_collision_list)) {
+	  //ajoute le voisin à une liste de sommets
 	  liste_voisins = ajout_tete(voisin_mot, longueur_mot, liste_voisins);
 	}
       }
@@ -234,14 +223,15 @@ Sommet get_proche_voisins(const unsigned char *mot, const Sommet *hashtable) {
  * @param - hashtable: la table de hashage crée                                         *
  ****************************************************************************************/
 void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_cible, const Sommet *hashtable) {
+  //traitement des cas spéciaux
   if(strlen(mot_depart) != strlen(mot_cible)) {
-    puts("\n\nThe words you have entered have different lengths and are thus not comparable!\n");
+    puts("\n\nLes mots que vous avez entré n'ont pas le meme longueur et par conséquence ne sont pas compatibles!\n");
     puts("\nPoussez RETURN pour rentrer dans le menu.\n");
     return;
   }
   unsigned int longueur_mot = strlen(mot_depart);
   if(compare_mots(mot_depart, mot_cible, longueur_mot)) {
-    puts("\n\nYou have entered the same word twice!\n");
+    puts("\n\nVous avez entré deux fois le meme mot! La distance est égale à 0.\n");
     puts("\nPoussez RETURN pour rentrer dans le menu.\n");
     return;
   }
@@ -256,25 +246,31 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
     puts("\nPoussez RETURN pour rentrer dans le menu.\n");
     return;
   }
-  
+  //la liste qui va comporter les sommets traités
   Cout_Sommet chemin_liste = NULL;
-  
+  //deuxième table de hashage qui sert comme graphe
   Cout_Sommet graphe_hashtable[TAILLE_HASHTABLE];
+  //création du graphe
   Sommet p = NULL;
-  volatile unsigned int i = 0;
+  unsigned int i = 0;
   for(i = 0; i < 1000; i++) {
     if(hashtable[i] != NULL) {
+      //important s'il n'y a pas de mot du meme longueur dans une liste de sommets
       graphe_hashtable[i] = NULL;
       for(p = hashtable[i]; p != NULL; p = p->suiv) {
+	//on veut que des mots du meme longueur
 	if(longueur_mot == strlen(p->val)) {
 	    graphe_hashtable[i] = ajout_cout_tete(p->val, longueur_mot, INT_MAX, NULL, graphe_hashtable[i]);
 	}
       }
     }
   }
+  //trouve le cout-sommet du mot de départ et donne lui un cout de 0
   Cout_Sommet j = recherche_cout_liste(mot_depart, longueur_mot, graphe_hashtable[index_depart]);
   j->cout = 0;
+  //le cout-sommet de notre mot cible
   Cout_Sommet but = NULL;
+  //entre la boucle de l'algorithme
   do {
     i = 0;
     //prend un sommet comme référence
@@ -283,9 +279,8 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
 	i++;
       }
     }
-    //printf("\n%s\t%d", graphe_hashtable[i]->val, i);
     Cout_Sommet min_sommet = graphe_hashtable[i];
-    //trouve le sommet avec le cout minimale
+    //trouve le sommet avec le cout minimal
     for(i; i < TAILLE_HASHTABLE; i++) {
       if(graphe_hashtable[i] != NULL) {
 	Cout_Sommet g = trouve_sommet_min_cout(min_sommet->cout, graphe_hashtable[i]);
@@ -294,42 +289,54 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
 	}
       }
     }
+    //j est le sommet de cout minimal
     j = min_sommet;
+    //k et l sont utilisé pour itérer vers les listes
     Cout_Sommet k = NULL;
     Sommet l = NULL;
+    //crée une liste des proches voisins
     Sommet distance_1 = get_proche_voisins(j->val, hashtable);
+    //ajoute j dans la liste des cout-sommets traités
     chemin_liste = ajout_cout_tete(j->val, longueur_mot, j->cout, j->pere, chemin_liste);
-    //printf("TO KILL: %s\t%d\n", j->val, j->cout);
+    //supprime j du graphe
     unsigned int index = hash(j->val);
     graphe_hashtable[index] = supprime_cout_sommet(j, graphe_hashtable[index]);
-    //puts("GOT KILLED\n");
+    //pour chaque proche voisin
     for(l = distance_1; l != NULL; l = l->suiv) {
-      k = recherche_cout_liste(l->val, longueur_mot, chemin_liste);
-      if(k == NULL) {
-	k = recherche_cout_liste(l->val, longueur_mot, graphe_hashtable[hash(l->val)]);
+      //trouve le cout-sommet correspondant au sommet du proche voisin dans le graphe
+      k = recherche_cout_liste(l->val, longueur_mot, graphe_hashtable[hash(l->val)]);
+      //k est encore dans le graphe
+      if(k != NULL) {
+	//si le cout est supérieur au cout de passer par j
+	//j se trouve à la tête de chemin-liste, donc il ne faut pas le chercher
 	if(k->cout > (chemin_liste->cout + 1)) {
+	  //incremente le cout et enregistre le père
 	  k->cout = chemin_liste->cout + 1;
 	  k->pere = chemin_liste;
 	}
       }
-      //printf("PROCHE VOISIN: %s\t%d\n", k->val, k->cout);
     }
+    //si but == NULL on n'a pas encore traité le mot cible
     but = recherche_cout_liste(mot_cible, longueur_mot, chemin_liste);
   } while((but == NULL) && (j->cout != INT_MAX));
   if(but == NULL) {
-    puts("\n\nThere is no path in the dictionary between your words!");
+    //il n'y a pas de chemin entre les deux mots
+    puts("\n\nIl n'y a pas de chemin dans le dictionnaire entre vos deux mots!");
     return;
   }
   Cout_Sommet l = but;
+  //montre le résultat
   while(l != NULL) {
     printf("\t%s\t%d\n", l->val, l->cout);
     l=l->pere;
     }
+  //libère la mémoire
   free_cout_hashtable(graphe_hashtable);
-  free_graphe(chemin_liste);
+  free_cout_liste(chemin_liste);
   puts("\n\nPoussez RETURN pour rentrer dans le menu.\n");
   return;
 }
+
 
 /****************************************************************************************
  * fontion pour lire les mots et trouver le chemin en utilisant get_proche_voisins()    *
@@ -338,19 +345,21 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
 void trouve_chemin(const Sommet *hashtable) {
   char mot_d[MAX_TAILLE_MOT+1];
   char mot_c[MAX_TAILLE_MOT+1];
+  //nettoyer l'entrée
   fflush(stdin);
   puts("\nEntrez votre mot de départ:\t");
   if(fgets(mot_d, MAX_TAILLE_MOT+1, stdin) == NULL) {
-    perror("\nError");
+    perror("\nErreur");
     return;
   }
+  //nettoyer l'entrée
   fflush(stdin);
   puts("\nEntrez votre mot cible:\t");
   if(fgets(mot_c, MAX_TAILLE_MOT+1, stdin) == NULL) {
-    perror("\nError");
+    perror("\nErreur");
     return;
   }
-  
+  //trouver le vrai longueur
   unsigned int i = 0;
   for(i = 0; i < MAX_TAILLE_MOT+1; i++) {
     if(mot_d[i] == '\n') {
@@ -360,7 +369,7 @@ void trouve_chemin(const Sommet *hashtable) {
   }
   char mot_depart[i+1];
   strcpy(mot_depart, mot_d);
-  
+  //trouver le vrai longueur
   unsigned int k = 0;
   for(k = 0; k < MAX_TAILLE_MOT+1; k++) {
     if(mot_c[k] == '\n') {
@@ -370,9 +379,8 @@ void trouve_chemin(const Sommet *hashtable) {
   }
   char mot_cible[k+1];
   strcpy(mot_cible, mot_c);
-
   puts("\n\n");
+  //trouve le plus court chemin entre les deux mots
   get_court_chemin(mot_depart, mot_cible, hashtable);
 }
-  
-  
+

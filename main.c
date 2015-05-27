@@ -3,6 +3,7 @@
 #include "fonctions.h"
 #include "sommet.h"
 
+
 int main() {
   //créer la table de hashage
   Sommet *hashtable = creer_hashtable("./mots/ufrancais.txt");
@@ -48,14 +49,7 @@ int main() {
   } while(input != '9');
   //libérer la mémoire
   free_hashtable(hashtable);
-  /*****
-TO OPTIMIZE:
-- optimize/merge/delete functions we do not need
-- better names
-- comment code
-- implement improvements -> see .pdf
-  *****/
-  
+  //au revoir
   printf("\nVous avez quitté le programme.\nMerci et bonne journée!\n\n");
   return 0;
 }
