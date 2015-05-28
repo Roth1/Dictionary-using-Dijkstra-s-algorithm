@@ -4,7 +4,7 @@
 /****************************************************************************************
  * fonction pour changer le chemin - donne le nouveau chemin                            *
  ****************************************************************************************/
-Sommet *change_chemin(void) {
+Sommet *change_chemin(Sommet *hashtable) {
   //nettoyer l'entrée
   fflush(stdin);
   //l'entrée (maximale)
@@ -33,13 +33,19 @@ Sommet *change_chemin(void) {
     puts("-> Impossible de créer une table de hashage!\n");
     return NULL;
   }
-  if(creer_hashtable(chemin) == NULL) {
-    puts("-> Impossible de créer une table de hashage!\n");
+  //teste si le fichier existe
+  FILE *fichier = NULL;
+  fichier = fopen(chemin,"r+");
+  //Erreur
+  if(!fichier) {
+    perror("Impossible de lire/ouvrir le fichier");
     return NULL;
-  } else {
-    //créer la table de hashage
-    return creer_hashtable(chemin);  
   }
+  //ferme le fichier
+  fclose(fichier);
+  //créer la table de hashage
+  //free_hashtable(hashtable);
+  return creer_hashtable(chemin);
 }
 
 
@@ -85,11 +91,6 @@ Sommet *creer_hashtable(const char *f) {
   FILE *fichier = NULL;
   //ouvre un fichier *.txt avec chemin + nom
   fichier = fopen(f,"r+");
-  //Erreur
-  if(!fichier) {
-    perror("Impossible de lire/ouvrir le fichier");
-    return NULL;
-  }
   //table de hashage va avoir une position statique/constante dans la mémoire
   static Sommet hashtable[TAILLE_HASHTABLE];
   //lit le fichier *.txt
@@ -126,13 +127,12 @@ void free_hashtable(Sommet *hashtable) {
   unsigned int i = 0;
   for(i = 0; i < 1000; i++) {
     if(hashtable[i] != NULL) {
-      p = hashtable[i];
       //free() toute la liste de collision
       while(hashtable[i]->suiv != NULL) {
+	p = hashtable[i];
 	hashtable[i] = hashtable[i]->suiv;
         free(p->val);
 	free(p);
-	p = hashtable[i];
       }
       free(hashtable[i]->val);
       free(hashtable[i]);
@@ -150,18 +150,34 @@ void free_cout_hashtable(Cout_Sommet *hashtable) {
   unsigned int i = 0;
   for(i = 0; i < 1000; i++) {
     if(hashtable[i] != NULL) {
-      p = hashtable[i];
       //free() toute la liste de collision
       while(hashtable[i]->suiv != NULL) {
+	p = hashtable[i];
 	hashtable[i] = hashtable[i]->suiv;
         free(p->val);
 	free(p);
-	p = hashtable[i];
       }
       free(hashtable[i]->val);
       free(hashtable[i]);
     }
   }
+}
+
+
+/****************************************************************************************
+ * fonction pour la libération de la mémoire (liste des éléments du type Cout_Sommet)   *
+ * @param - graphe_liste: une cout-liste                                                *
+ ****************************************************************************************/
+void free_liste(Sommet liste) {
+  Sommet p = liste;
+  while(liste->suiv != NULL) {
+    liste = liste->suiv;
+    free(p->val);
+    free(p);
+    p = liste;
+  }
+  free(liste->val);
+  free(liste);
 }
 
 
@@ -316,6 +332,8 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
 	}
       }
     }
+    //libère la mémoire
+    free_liste(distance_1);
     //si but == NULL on n'a pas encore traité le mot cible
     but = recherche_cout_liste(mot_cible, longueur_mot, chemin_liste);
   } while((but == NULL) && (j->cout != INT_MAX));
@@ -324,15 +342,25 @@ void get_court_chemin(const unsigned char *mot_depart, const unsigned char *mot_
     puts("\n\nIl n'y a pas de chemin dans le dictionnaire entre vos deux mots!");
     return;
   }
+  //met la liste des résultats dans le bon ordre
+  Sommet afficher_resultat = NULL;
   Cout_Sommet l = but;
-  //montre le résultat
   while(l != NULL) {
-    printf("\t%s\t%d\n", l->val, l->cout);
+    afficher_resultat = ajout_tete(l->val, longueur_mot, afficher_resultat);
     l=l->pere;
-    }
+  }
+  //montre le résultat
+  Sommet s = afficher_resultat;
+  printf("%s", s->val);
+  s = s->suiv;
+  while(s != NULL) {
+    printf(" -> %s", s->val);
+    s = s->suiv;
+  }
   //libère la mémoire
   free_cout_hashtable(graphe_hashtable);
   free_cout_liste(chemin_liste);
+  free_liste(afficher_resultat);
   puts("\n\nPoussez RETURN pour rentrer dans le menu.\n");
   return;
 }

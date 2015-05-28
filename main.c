@@ -37,9 +37,8 @@ int main() {
       break;
     case '1':
       printf("\n*** Changer le chemin de la source ***\n\nEntrez-vous le nouveau chemin:\t");
-      if(change_chemin() != NULL) {
-	free_hashtable(hashtable);
-	hashtable = change_chemin();
+      if(change_chemin(hashtable) != NULL) {
+	hashtable = change_chemin(hashtable);
       }
       break;
     default:

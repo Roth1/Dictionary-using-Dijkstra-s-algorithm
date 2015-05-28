@@ -33,7 +33,7 @@ int recherche_liste(const unsigned char *mot, const unsigned int longueur_mot, c
   unsigned int longueur_mot_liste = 0;
   while(p != NULL) {
     longueur_mot_liste = strlen(p->val);
-    if((longueur_mot == longueur_mot_liste) && compare_mots(mot, p->val, longueur_mot)) {
+    if((longueur_mot == longueur_mot_liste) && !strcmp(mot, p->val)) {
 	return 1;
     }
     p = p->suiv;
@@ -153,7 +153,7 @@ Cout_Sommet supprime_cout_sommet(Cout_Sommet j, Cout_Sommet C_L) {
 Cout_Sommet recherche_cout_liste(const unsigned char *mot, const unsigned int longueur_mot, const Cout_Sommet C_L) {
   Cout_Sommet j = C_L;
   while(j != NULL) {
-    if((longueur_mot == strlen(j->val)) && compare_mots(mot, j->val, longueur_mot)) {
+    if(!strcmp(mot, j->val)) {
 	return j;
     }
     j =j->suiv;

@@ -12,8 +12,8 @@
 #define MAX_TAILLE_MOT 26
 
 
-//fonction pour changer le chemin
-Sommet *change_chemin(void);
+//fonction pour changer le chemin 
+Sommet *change_chemin(Sommet *hashtable);
 
 //fonction de hashage
 int hash(const unsigned char *str);
@@ -33,8 +33,11 @@ void free_cout_hashtable(Cout_Sommet *hashtable);
 //fonction pour créer le graphe
 Cout_Sommet *creer_graphe(const unsigned int longueur_mot, const Sommet *hashtable);
 
-//fonction pour la libération de la mémoire (graphe)
-void free_cout_liste(Cout_Sommet graphe_liste);
+//fonction pour la libération de la mémoire (liste de sommets)
+void free_liste(Sommet liste);
+
+//fonction pour la libération de la mémoire (liste de cout-sommets)
+void free_cout_liste(Cout_Sommet cout_liste);
 
 //fonction pour trouver les voisins à distance 1
 Sommet get_proche_voisins(const unsigned char *mot, const Sommet *hashtable);
